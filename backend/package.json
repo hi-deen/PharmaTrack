@@ -1,0 +1,30 @@
+{
+  "name": "pharmatrack-backend",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon --watch src --ext js --exec node src/server.js",
+    "start": "node src/server.js",
+    "lint": "eslint .",
+    "test": "echo \"no tests yet\" && exit 0"
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "helmet": "^6.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.3.1",
+    "morgan": "^1.10.0",
+    "socket.io": "^4.8.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "eslint": "^8.46.0",
+    "nodemon": "^3.1.11"
+  }
+}

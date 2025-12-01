@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build: ./backend
+    env_file:
+      - ./backend/.env.example
+    environment:
+      - MONGO_URL=mongodb+srv://yoursmilingdoctor_db_user:QUnZada6wP71Ed7S@cluster0.duiv1iv.mongodb.net/PharmaTrack?appName=Cluster0
+      - FRONTEND_URL=http://localhost:5173
+      - JWT_SECRET=devsecret
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
