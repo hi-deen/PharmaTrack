@@ -28,7 +28,3 @@ Thumbs.db
 .env.*.local
 .env.local
 
-
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
