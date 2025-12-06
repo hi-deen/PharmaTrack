@@ -1,17 +1,24 @@
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
 
-export default async function auth(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ error: "no token" });
-  const token = authHeader.split(" ")[1];
+export function requireAuth(req, res, next) {
+  const header = req.headers.authorization;
+  if (!header) return res.status(401).json({ error: "missing token" });
+
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(payload.sub).select("-passwordHash");
-    if (!user) return res.status(401).json({ error: "invalid" });
-    req.user = { id: user._id, name: user.name, role: user.role };
+    const token = header.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
     next();
   } catch (err) {
     return res.status(401).json({ error: "invalid token" });
   }
+}
+
+export function requireRole(...roles) {
+  return (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res.status(403).json({ error: "forbidden" });
+    }
+    next();
+  };
 }
