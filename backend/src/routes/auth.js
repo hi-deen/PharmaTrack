@@ -48,12 +48,12 @@ const transporter = nodemailer.createTransport({
 /* REGISTER */
 router.post("/register", authLimiter, async (req, res) => {
   try {
-    const validated = registerSchema(req.body);
+    const validated = registerSchema.safeParse(req.body);
     if (!validated.success) {
       return res.status(400).json({ error: "validation failed", details: validated.error.errors });
     }
 
-    const { name, email, password, role = "operator" } = validated.data;
+    const { name, email, password, role = "staff" } = validated.data;
 
     if (!validatePasswordRules(password)) {
       return res.status(400).json({
@@ -98,7 +98,7 @@ router.post("/register", authLimiter, async (req, res) => {
 /* LOGIN */
 router.post("/login", authLimiter, async (req, res) => {
   try {
-    const validated = loginSchema(req.body);
+    const validated = loginSchema.safeParse(req.body);
     if (!validated.success) {
       return res.status(400).json({ error: "validation failed" });
     }
@@ -188,7 +188,7 @@ router.post("/2fa/setup", authLimiter, async (req, res) => {
 router.post("/2fa/confirm", authLimiter, async (req, res) => {
   try {
     const { tempToken, code } = req.body;
-    if (!tempToken || !code) return res.status(400).json({
+    if (!tempToken || !code) return res.status(400).json({ error: "missing tempToken or code" });
 
     let payload;
     try {
