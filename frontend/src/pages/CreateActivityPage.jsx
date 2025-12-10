@@ -42,7 +42,7 @@ export default function CreateActivityPage() {
     const fetchDepartments = async () => {
       try {
         const res = await client.get("/departments");
-        setDepartments(res.data);
+        setDepartments(res.data || []);
       } catch (err) {
         console.error("Failed to load departments:", err);
         setError("Failed to load departments");
